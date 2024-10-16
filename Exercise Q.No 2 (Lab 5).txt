@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+
+namespace FlightReservationSystem
+{
+    public abstract class Customer
+    {
+        public int CustomerId { get; set; }
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class RetailCustomer : Customer
+    {
+        public string CreditCardType { get; set; }
+        public string CreditCardNo { get; set; }
+    }
+
+    public class CorporateCustomer : Customer
+    {
+        public string CompanyName { get; set; }
+        public int FrequentFlyerPts { get; set; }
+        public string BillingAccountNo { get; set; }
+    }
+
+    // Represents a Flight
+    public class Flight
+    {
+        public int FlightId { get; set; }
+        public string Origin { get; set; }
+        public string Destination { get; set; }
+        public DateTime DepartureTime { get; set; }
+        public DateTime ArrivalTime { get; set; }
+        public int SeatingCapacity { get; set; }
+        public List<Reservation> Reservations { get; set; } = new List<Reservation>();
+    }
+
+    // Represents a Reservation
+    public class Reservation
+    {
+        public int ReservationNo { get; set; }
+        public int RowNo { get; set; }
+        public int SeatNo { get; set; }
+        public decimal Price { get; set; }
+        public DateTime Date { get; set; }
+        public Customer Customer { get; set; }
+        public Flight Flight { get; set; }
+
+        public Reservation(Customer customer, Flight flight)
+        {
+            Customer = customer;
+            Flight = flight;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var retailCustomer = new RetailCustomer
+            {
+                CustomerId = 1,
+                FirstName = "John",
+                LastName = "Jane",
+                CreditCardType = "Visa",
+                CreditCardNo = "1234-5678-9012-3456"
+            };
+
+            var corporateCustomer = new CorporateCustomer
+            {
+                CustomerId = 2,
+                FirstName = "Jane",
+                LastName = "Smith",
+                CompanyName = "Tech Corp",
+                FrequentFlyerPts = 1500,
+                BillingAccountNo = "ACCT-12345"
+            };
+
+            var flight = new Flight
+            {
+                FlightId = 101,
+                Origin = "New York",
+                Destination = "Los Angeles",
+                DepartureTime = DateTime.Now.AddHours(3),
+                ArrivalTime = DateTime.Now.AddHours(6),
+                SeatingCapacity = 200
+            };
+
+            var reservation = new Reservation(retailCustomer, flight)
+            {
+                ReservationNo = 1001,
+                RowNo = 10,
+                SeatNo = 15,
+                Price = 299.99m,
+                Date = DateTime.Now
+            };
+
+            Console.WriteLine($"Reservation No: {reservation.ReservationNo}");
+            Console.WriteLine($"Customer: {reservation.Customer.FirstName} {reservation.Customer.LastName}");
+            Console.WriteLine($"Flight from {flight.Origin} to {flight.Destination}");
+            Console.WriteLine($"Seat: Row {reservation.RowNo}, Seat {reservation.SeatNo}");
+            Console.WriteLine($"Price: {reservation.Price:C}");
+        }
+    }
+}

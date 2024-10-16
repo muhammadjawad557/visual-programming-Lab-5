@@ -1,0 +1,69 @@
+using System;
+using System.IO; 
+using System.Threading.Tasks;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            double a = 90, b = 0;
+            double result = 0;
+
+            try
+            {
+                result = SafeDivision(a, b);
+                Console.WriteLine($"(a) divided by (b) = {result}");
+            }
+            catch (DivideByZeroException)
+            {
+                Console.WriteLine("Attempted to divide by zero");
+            }
+
+            Task.Run(() => TestCatch()).Wait();
+        }
+
+        static double SafeDivision(double x, double y)
+        {
+            if (y == 0)
+                throw new DivideByZeroException();
+            return x / y;
+        }
+
+        static async Task TestCatch()
+        {
+            StringWriter sw = null;
+            try
+            {
+                sw = new StringWriter();
+                await sw.WriteLineAsync("hello"); 
+            }
+            finally
+
+                {
+                    sw.Close();
+                }
+        
+
+            Console.WriteLine("Done");
+        }
+    }
+}
+    public class WorkItem
+    {
+        // Changed to public for external access, if needed
+        public int ID { get; protected set; }
+        public string Title { get; protected set; }
+        public string Description { get; protected set; }
+        public TimeSpan JobLength { get; protected set; } 
+
+        public WorkItem()
+        {
+            ID = 0;
+            Title = "Default title";
+            Description = "Default description.";
+            JobLength = TimeSpan.Zero; 
+        }
+    }
+
